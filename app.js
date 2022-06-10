@@ -1,9 +1,13 @@
 const express = require('express');
+const helmet = require('helmet')
+
 const usersRouter = require('./routes/users');
 const cardRouter = require('./routes/card');
 
 const app = express();
 const { PORT = 3000 } = process.env;
+
+app.use(helmet())
 
 // to serve static files that are in the public directory ie. http://localhost:3000/kitten.jpg
 // app.use(express.static(path.join(__dirname, 'public')));

@@ -32,7 +32,8 @@ const sendUsers = (req, res) => {
   //   .catch(() => res.status(500).send({ message: 'An error has occured' }));
 
   readUsersFilePromise()
-    .then((users) => {
+    .then((data) => {
+      const users = JSON.parse (data);
       res.send(users);
     })
     .catch(() => respondServerError(res));
