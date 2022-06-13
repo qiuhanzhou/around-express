@@ -13,7 +13,7 @@ router.get('/cards', (req, res) => {
   fsPromises
     .readFile(CARDS_PATH, { encoding: 'utf8' })
     .then((data) => {
-      const cards = JSON.parse (data);
+      const cards = JSON.parse(data);
       res.send(cards);
     })
     .catch(() => res.status(500).send({ message: 'An error has occured' }));

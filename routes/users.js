@@ -33,7 +33,7 @@ const sendUsers = (req, res) => {
 
   readUsersFilePromise()
     .then((data) => {
-      const users = JSON.parse (data);
+      const users = JSON.parse(data);
       res.send(users);
     })
     .catch(() => respondServerError(res));
