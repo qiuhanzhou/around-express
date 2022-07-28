@@ -3,5 +3,4 @@ build
 coverage
 
 # Ignore all HTML files:
-*.html
-*.js
+*.h?n
