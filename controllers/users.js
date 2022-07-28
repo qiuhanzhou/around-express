@@ -34,11 +34,10 @@ module.exports.createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({
-          message: `${
+          message:
             Object.values(err.errors)
               .map((error) => error.message)
-              .join(', ')
-          }`,
+              .join(', '),
         });
       } else {
         res.status(500).send({ message: 'An error has occured' });
@@ -51,7 +50,7 @@ module.exports.updateUserProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, {
     new: true, // the then handler receives the updated entry as input
-    upsert: true, // if the user entry wasn't found, it will be created
+    runValidators: true,
   })
     .orFail(() => {
       const error = new Error('No user found with that id');
@@ -61,7 +60,9 @@ module.exports.updateUserProfile = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       console.log(err);
-      if (err.statusCode === 404) {
+      if (err.name === 'ValidationError') {
+        res.status(400).send(err);
+      } else if (err.statusCode === 404) {
         res.status(404).send({ message: err.message });
       } else {
         res.status(500).send({ message: 'An error has occured' });
@@ -74,7 +75,7 @@ module.exports.updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, {
     new: true, // the then handler receives the updated entry as input
-    upsert: true, // if the user entry wasn't found, it will be created
+    runValidators: true,
   })
     .orFail(() => {
       const error = new Error('No user found with that id');
@@ -84,7 +85,9 @@ module.exports.updateUserAvatar = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       console.log(err);
-      if (err.statusCode === 404) {
+      if (err.name === 'ValidationError') {
+        res.status(400).send(err);
+      } else if (err.statusCode === 404) {
         res.status(404).send({ message: err.message });
       } else {
         res.status(500).send({ message: 'An error has occured' });
